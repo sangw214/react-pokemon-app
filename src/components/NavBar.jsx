@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth"
 import app from '../firebase'
 import { Logout } from './../assets/Logout';
+import { Login as LoginAssets } from './../assets/Login';
+import { Guest } from './../assets/Guest';
 
 const NavBar = () => {
 
@@ -132,8 +134,12 @@ const NavBar = () => {
 
       { pathname === '/login' ? (
           <>
-            <GuestButton onClick={handleGuest}>GUEST</GuestButton>
-            <LoginButton onClick={handleAuth}>LOGIN</LoginButton>
+            <GuestButton onClick={handleGuest}>
+              <Guest className='w-12 h-12 z-50 animate-spin text-slate-300'/>              
+            </GuestButton>
+            <LoginButton onClick={handleAuth}>
+              <LoginAssets className='w-12 h-12 z-50 animate-spin text-slate-300'/>
+            </LoginButton>
           </>
       ) : (
         <SignOut>
