@@ -12,9 +12,11 @@ const MainPage = () => {
   const [dsiplayedPokemons, setDsiplayedPokemons] = useState([])
 
   /* 조회 갯수 목록 */
-  const limitNum = 20;
+  const limitNum = 20
 
-  const allPokemonUrl = `https://pokeapi.co/api/v2/pokemon/?limit=1016&offset=0`
+  const maxcount = 1016
+
+  const allPokemonUrl = `https://pokeapi.co/api/v2/pokemon/?limit=${maxcount}&offset=0`
 
   useEffect(() => {
     fetchPokeData(true)
@@ -39,6 +41,14 @@ const MainPage = () => {
     return array
 
   }
+
+  const filterAllDisplayedPokemonData = ( allpokemonsData ) => {
+
+    const array = allpokemonsData.filter( ( p, i ) => i + 1 <= maxcount )
+
+    return array
+
+  }  
   
   return (
     <>
@@ -71,8 +81,17 @@ const MainPage = () => {
             onClick={ () => setDsiplayedPokemons( filterDisplayedPokemonData( allpokemons, dsiplayedPokemons ) ) }
           >
             더 보기
-          </button>          
+          </button>
         ) }
+        &nbsp;
+        { ( dsiplayedPokemons.length != maxcount ) && (        
+          <button 
+            className='bg-slate-800 px-6 py-2 my-4 text-base rounded-lg font-bold text-white'
+            onClick={ () => setDsiplayedPokemons( filterAllDisplayedPokemonData( allpokemons ) ) }
+          >
+            모두보기
+          </button>
+        ) }          
       </div>
     </article>
     </>

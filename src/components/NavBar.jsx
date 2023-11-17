@@ -96,16 +96,16 @@ const NavBar = () => {
 
     setImgUrl(img)
 
-    window.addEventListener('scroll', listener )
+    //window.addEventListener('scroll', listener )
 
     return () => {
-      window.removeEventListener('scroll', listener )
+      //window.removeEventListener('scroll', listener )
     }
 
   }, [])  
 
   const { pathname } = useLocation()
-
+/*
   const listener = () => {
 
     if( window.scrollY > 50 ){
@@ -119,7 +119,7 @@ const NavBar = () => {
     }
 
   }
-
+*/
   return (
     <NavWrapper show={show}>
       <Logo>
