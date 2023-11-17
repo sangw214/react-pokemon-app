@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth"
 import app from '../firebase'
+import { Logout } from './../assets/Logout';
 
 const NavBar = () => {
 
@@ -141,9 +142,9 @@ const NavBar = () => {
             alt='user photo'
             loading='lazy'
           />
-          <Dropdown onClick={handleLogout}>
-            <span>SignOut</span>
-          </Dropdown>
+          <GuestButton onClick={handleLogout}>
+            <Logout className='w-12 h-12 z-50 animate-spin text-slate-300'/>
+          </GuestButton>
         </SignOut>
       ) }
     </NavWrapper>
