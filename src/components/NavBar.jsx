@@ -15,26 +15,48 @@ const NavBar = () => {
 
     signInWithPopup(auth, provider)
     .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
       setUserData( result.user )
       localStorage.setItem( 'userData', JSON.stringify( result.user ) )
       navigate('/')
     }).catch((error) => {
-      const credential = GoogleAuthProvider.credentialFromError(error);
       console.log('# login err ', error )
       navigate('/login')
     });
 
   }
 
+  const handleGuest = () => {
+    setUserData( {name: 'guest', photoURL:imgUrl } )
+    localStorage.setItem( 'userData', JSON.stringify( userData ) )
+    navigate('/')
+  }
+
+  const handleRoot = () => {
+
+    if( userData && userData.name ){
+      navigate('/')
+    }else{
+      navigate('/login')
+    }
+
+  }
+
   const handleLogout = () => {
 
-    signOut(auth)
-    .then( () => {
+    if( userData.name === 'guest' ){
+
       setUserData({})
-    } ).catch( ( err ) => {
-      alert(err)
-    } )
+
+    }else{
+
+      signOut(auth)
+      .then( () => {
+        setUserData({})
+      } ).catch( ( err ) => {
+        alert(err)
+      } )
+
+    }
 
   }
 
@@ -46,7 +68,9 @@ const NavBar = () => {
   useEffect(() => {
 
     const unsubscribe = onAuthStateChanged( auth, ( user ) => {
-      if( !user ){
+      if( userData.name == 'guest'){
+        navigate('/')
+      }else if( !user ){
         navigate('/login')
       }else if( user && pathname === '/login' ) {
         navigate('/')
@@ -57,7 +81,7 @@ const NavBar = () => {
       unsubscribe()
     }
 
-  },[])
+  },[ userData ])
 
 
   const [imgUrl, setImgUrl] = useState("") 
@@ -101,17 +125,21 @@ const NavBar = () => {
         <Image
           alt='poke logo'
           src={imgUrl}
-          onClick={()=>(window.location.href='/')}
+          onClick={handleRoot}
         />
       </Logo>
 
       { pathname === '/login' ? (
-        <LoginButton onClick={handleAuth}>LOGIN</LoginButton>
+          <>
+            <GuestButton onClick={handleGuest}>GUEST</GuestButton>
+            <LoginButton onClick={handleAuth}>LOGIN</LoginButton>
+          </>
       ) : (
         <SignOut>
           <UserImag 
-            src={userData.photoURL}
+            src={userData.photoURL ? userData.photoURL : ''}
             alt='user photo'
+            loading='lazy'
           />
           <Dropdown onClick={handleLogout}>
             <span>SignOut</span>
@@ -161,6 +189,23 @@ const SignOut = styled.div`
 `
 
 const LoginButton = styled.a`
+  background-color: rgba(0,0,0,.6);
+  padding: 8px 16px;
+  text-transform: uppercase;
+  letter-spacing: 1.55px;
+  border: 1px solid #f9f9f9;
+  border-radius: 4px;
+  transition: all .2s ease 0s;
+  cursor:pointer;
+  color: white;
+  &:hover {
+    background-color: #F9F9F9;
+    color: #000;
+    border-color: transparent;
+  }
+`
+
+const GuestButton = styled.a`
   background-color: rgba(0,0,0,.6);
   padding: 8px 16px;
   text-transform: uppercase;

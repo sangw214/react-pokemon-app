@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import { Loading } from './../../assets/Loading';
 
 const LoginPage = () => {
 
   const [imgUrl, setImgUrl] = useState("") 
+  const [isLoading, setIsLoading] = useState(true)
+  const [opacity, setOpacity] = useState('opacity-9')
 
   useEffect(() => {
 
@@ -12,7 +15,9 @@ const LoginPage = () => {
 
     setImgUrl(img)
 
-  }, [])
+    isLoading ? setOpacity('opacity-0') : setOpacity('opacity-100') 
+
+  }, [isLoading])
   
 
   return (
@@ -24,12 +29,19 @@ const LoginPage = () => {
           <p className='text-xs mt-4 text-[#002D74]'>환영합니다.</p>
           <p className='text-xs mt-4 text-[#002D74]'>로그인해 주세요.</p>
         </div>
-        <div className='md:block hidden w-1/2'>
+        <div className='md:block hidden'>
+          {isLoading &&(
+            <div className='h-full z-10 w-full flex items-center justify-center'>
+              <Loading className='w-12 h-12 z-50 animate-spin text-slate-300'/>
+            </div>
+          )}          
           <img 
           alt='login'
-          className='rounded-2xl w-[400px] h-[400px]'
           src={imgUrl} 
-          />      
+          loading='lazy'
+          onLoad={()=>setIsLoading(false)}
+          className={`rounded-2xl w-[400px] object-contain h-full ${opacity}`}
+          />
         </div>
       </div>
     </section>
